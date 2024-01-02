@@ -185,6 +185,129 @@
             </div>
           </section> -->
         </section>
+        <!-- Tab -->
+        <section class="tab-container">
+          <div class="tab-list" aria-label="Tab navigation">
+            <button
+              class="tab-btn"
+              aria-selected="true"
+              id="tab-1"
+              tabindex="0"
+              aria-controls="pabel-1"
+              data-tab-btn
+            >
+              Repositories
+            </button>
+            <button
+              class="tab-btn"
+              aria-selected="false"
+              id="tab-2"
+              tabindex="-1"
+              aria-controls="pabel-2"
+              data-tab-btn
+              data-forked-tab-btn
+            >
+              Forked
+            </button>
+            <button
+              class="tab-btn"
+              aria-selected="false"
+              id="tab-3"
+              tabindex="-1"
+              aria-controls="pabel-3"
+              data-tab-btn
+              data-follower-tab-btn
+            >
+              Followers
+            </button>
+            <button
+              class="tab-btn"
+              aria-selected="false"
+              id="tab-4"
+              tabindex="-1"
+              aria-controls="pabel-4"
+              data-tab-btn
+              data-following-tab-btn
+            >
+              Following
+            </button>
+          </div>
+          <div
+            class="tab-pane"
+            id="panel-1"
+            tabindex="0"
+            aria-labelledby="tab-1"
+            data-tab-panel
+            data-repo-panel
+          >
+            <h2 class="sr-only">Repositories</h2>
+
+            <article class="card repo-card">
+              <div class="card-body">
+                <a href="" class="card-title" target="_blank">
+                  <h3 class="title-3">weatherio-starter</h3>
+                </a>
+                <p class="card-text">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+                <span class="badge">Public</span>
+              </div>
+              <div class="card-footer">
+                <div class="meta-item">
+                  <span class="material-symbols-rounded" aria-hidden="true"
+                    >code_blocks</span
+                  >
+                  <span class="span">Css</span>
+                </div>
+                <div class="meta-item">
+                  <span class="material-symbols-rounded" aria-hidden="true"
+                    >star_rate</span
+                  >
+                  <span class="span">12</span>
+                </div>
+                <div class="meta-item">
+                  <span class="material-symbols-rounded" aria-hidden="true"
+                    >family_history</span
+                  >
+                  <span class="span">4</span>
+                </div>
+              </div>
+            </article>
+
+            <div class="error-content">
+              <p class="title-1">Oops!</p>
+              <p class="text">Doesn't have the any public repositories yet</p>
+            </div>
+          </div>
+          <div
+            class="tab-pane"
+            id="panel-2"
+            tabindex="0"
+            aria-labelledby="tab-2"
+            data-tab-panel
+            data-fork-panel
+            hidden
+          ></div>
+          <div
+            class="tab-pane"
+            id="panel-3"
+            tabindex="0"
+            aria-labelledby="tab-3"
+            data-tab-panel
+            data-follower-panel
+            hidden
+          ></div>
+          <div
+            class="tab-pane"
+            id="panel-4"
+            tabindex="0"
+            aria-labelledby="tab-4"
+            data-tab-panel
+            data-following-panel
+            hidden
+          ></div>
+        </section>
       </div>
     </main>
 
