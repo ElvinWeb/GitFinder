@@ -623,3 +623,100 @@ body {
   background-color: var(--primary);
   border-radius: var(--radius-pill);
 }
+/* -----------------Card--------------- */
+.card {
+  --spacing: 16px;
+  background-color: var(--surface);
+  border-radius: var(--radius-12);
+  overflow: hidden;
+}
+.card :where(.card-body, .card-footer) {
+  padding: var(--spacing);
+}
+/* -----------------Repository Card--------------- */
+.repo-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.repo-card .card-body {
+  flex-grow: 1;
+}
+.repo-card .card-title {
+  max-width: max-content;
+  padding-inline-end: 76px;
+  transition: var(--transition-short);
+}
+.repo-card .card-title:where(:hover, :focus-visible) {
+  color: var(--primary);
+}
+.repo-card .card-text {
+  color: var(--on-surface-variant);
+  display: -webkit-box;
+  overflow-y: hidden;
+  margin-block-start: 8px;
+}
+.repo-card .badge {
+  position: absolute;
+  top: var(--spacing);
+  right: var(--spacing);
+}
+.repo-card .card-footer {
+  background-color: var(--surface-variant);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing);
+}
+.repo-card .meta-item {
+  color: var(--on-surface);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+/* -----------------Badge--------------- */
+.badge {
+  background-color: var(--surface-variant);
+  color: var(--alpha-60);
+  max-width: max-content;
+  font-size: var(--label-2);
+  font-weight: var(--weight-regular);
+  text-transform: uppercase;
+  height: 24px;
+  line-height: 24px;
+  padding-inline: 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--surface-variant-outline);
+}
+/* -----------------Tab--------------- */
+.tab-container .tab-list {
+  margin-inline: -16px;
+  padding-inline: 16px;
+}
+.tab-panel {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-block-start: 16px;
+}
+.tab-panel[hidden] {
+  display: none;
+}
+.tab-panel .card {
+  flex-grow: 1;
+  width: 100%;
+}
+.tab-panel .error-content {
+  width: 100%;
+  padding-block: 96px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tab-panel .error-content .title-1 {
+  color: var(--alpha-50);
+}
+.tab-panel .error-content .text {
+  color: var(--alpha-80);
+}
