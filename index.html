@@ -100,7 +100,7 @@
     </header>
 
     <main class="main" id="main">
-      <!-- Profile -->
+      <!---- Profile ---->
       <div class="container">
         <section class="profile" data-profile-card>
           <figure
@@ -185,7 +185,7 @@
             </div>
           </section> -->
         </section>
-        <!-- Tab -->
+        <!---- Tab ---->
         <section class="tab-container">
           <div class="tab-list" aria-label="Tab navigation">
             <button
@@ -241,7 +241,65 @@
             data-repo-panel
           >
             <h2 class="sr-only">Repositories</h2>
-
+            <article class="card repo-card">
+              <div class="card-body">
+                <a href="" class="card-title" target="_blank">
+                  <h3 class="title-3">ToDo-Application</h3>
+                </a>
+                <p class="card-text">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+                <span class="badge">Public</span>
+              </div>
+              <div class="card-footer">
+                <div class="meta-item">
+                  <span class="material-symbols-rounded" aria-hidden="true"
+                    >code_blocks</span
+                  >
+                  <span class="span">Css</span>
+                </div>
+                <div class="meta-item">
+                  <span class="material-symbols-rounded" aria-hidden="true"
+                    >star_rate</span
+                  >
+                  <span class="span">12</span>
+                </div>
+                <div class="meta-item">
+                  <span class="material-symbols-rounded" aria-hidden="true"
+                    >family_history</span
+                  >
+                  <span class="span">4</span>
+                </div>
+              </div>
+            </article>
+            <div class="card repo-skeleton">
+              <div class="card-body">
+                <div class="skeleton title-skeleton"></div>
+                <div class="skeleton text-skeleton text-1"></div>
+                <div class="skeleton text-skeleton text-2"></div>
+              </div>
+              <div class="card-footer">
+                <div class="skeleton text-skeleton"></div>
+                <div class="skeleton text-skeleton"></div>
+                <div class="skeleton text-skeleton"></div>
+              </div>
+            </div>
+            <div class="error-content">
+              <p class="title-1">Oops!</p>
+              <p class="text">Doesn't have the any public repositories yet</p>
+            </div>
+          </div>
+          <div
+            class="tab-panel"
+            id="panel-2"
+            tabindex="0"
+            aria-labelledby="tab-2"
+            data-tab-panel
+            data-fork-panel
+            hidden
+          >
+            <h2 class="sr-only">Forked Repositories</h2>
             <article class="card repo-card">
               <div class="card-body">
                 <a href="" class="card-title" target="_blank">
@@ -277,18 +335,9 @@
 
             <div class="error-content">
               <p class="title-1">Oops!</p>
-              <p class="text">Doesn't have the any public repositories yet</p>
+              <p class="text">Doesn't have the any Forked repositories yet</p>
             </div>
           </div>
-          <div
-            class="tab-panel"
-            id="panel-2"
-            tabindex="0"
-            aria-labelledby="tab-2"
-            data-tab-panel
-            data-fork-panel
-            hidden
-          ></div>
           <div
             class="tab-panel"
             id="panel-3"
@@ -297,7 +346,32 @@
             data-tab-panel
             data-follower-panel
             hidden
-          ></div>
+          >
+            <h2 class="sr-only">Followers</h2>
+            <article class="card follower-card">
+              <figure class="avatar-circle img-holder">
+                <img
+                  src="./assets/Images/my photo.jpg"
+                  alt=""
+                  class="img-cover"
+                />
+              </figure>
+              <h3 class="card-title">Elvin Sarkarov</h3>
+              <button class="icon-btn" aria-label="Go to johndoe profile">
+                <span class="material-symbols-rounded" aria-hidden="true"
+                  >link</span
+                >
+              </button>
+            </article>
+            <div class="card follower-skeleton">
+              <div class="avatar-skeleton skeleton"></div>
+              <div class="title-skeleton skeleton"></div>
+            </div>
+            <div class="error-content">
+              <p class="title-1">Oops!</p>
+              <p class="text">Doesn't have the any follower yet</p>
+            </div>
+          </div>
           <div
             class="tab-panel"
             id="panel-4"
@@ -306,11 +380,39 @@
             data-tab-panel
             data-following-panel
             hidden
-          ></div>
+          >
+            <h2 class="sr-only">Following</h2>
+            <article class="card follower-card">
+              <figure class="avatar-circle img-holder">
+                <img
+                  src="./assets/Images/follower-img.png"
+                  alt=""
+                  class="img-cover"
+                />
+              </figure>
+              <h3 class="card-title">Zahra McDonald</h3>
+              <button class="icon-btn" aria-label="Go to johndoe profile">
+                <span class="material-symbols-rounded" aria-hidden="true"
+                  >link</span
+                >
+              </button>
+            </article>
+            <div class="error-content">
+              <p class="title-1">Oops!</p>
+              <p class="text">Doesn't have the any following yet</p>
+            </div>
+          </div>
+        </section>
+        <!---- Error ---->
+        <section class="error" data-error>
+          <p class="title-1">Oops! :(</p>
+          <p class="text">There is no account with this username yet.</p>
         </section>
       </div>
     </main>
-
+    <footer class="footer container">
+      <p class="copyright">&copy; 2024 Created by ElvinWeb</p>
+    </footer>
     <script src="./assets/JavaScript/app.js" type="module"></script>
     <!---theme js-->
     <script src="./assets/JavaScript/theme.js"></script>
