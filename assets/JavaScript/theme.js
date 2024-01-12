@@ -1,6 +1,6 @@
 const html = document.documentElement;
 const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-console.log(isDark);
+
 
 if (sessionStorage.getItem("theme")) {
   html.dataset.theme = sessionStorage.getItem("theme");
