@@ -1,4 +1,4 @@
-export async function fetchData(url, successCallback, errorCallBack) {
+export default async function fetchData(url, successCallback, errorCallBack) {
   const response = await fetch(url);
   if (response.ok) {
     const data = await response.json();

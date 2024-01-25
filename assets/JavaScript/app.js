@@ -1,4 +1,4 @@
-import { fetchData } from "./api";
+import fetchData from "./api.js";
 
 const addEventOnElement = function ($elements, eventType, callback) {
   for (const $item of $elements) {
@@ -59,7 +59,7 @@ addEventOnElement(tabBtns, "keydown", function (e) {
   }
 });
 
-let apiUrl = "https://api.github.com/users/codewithsadee";
+let apiUrl = "https://api.github.com/users/ElvinWeb";
 let repoUrl,
   followerUrl,
   followingUrl = "";
@@ -108,30 +108,32 @@ window.updateProfile = function (profileUrl) {
       </div>
   `.repeat(6);
 
-  fetchData(profileUrl, (data) => {
-    const {
-      type,
-      avatar_url,
-      page_url: githubPageUrl,
-      name,
-      bio,
-      login: username,
-      location,
-      company,
-      blog: website,
-      twitter_username,
-      public_repos,
-      followers,
-      following,
-      followers_url,
-      following_url,
-      repos_url,
-    } = data;
-    repoUrl = repos_url;
-    followerUrl = followers_url;
-    followingUrl = following_url.replace("{/other_user}", "");
+  fetchData(
+    profileUrl,
+    (data) => {
+      const {
+        type,
+        avatar_url,
+        page_url: githubPageUrl,
+        name,
+        bio,
+        login: username,
+        location,
+        company,
+        blog: website,
+        twitter_username,
+        public_repos,
+        followers,
+        following,
+        followers_url,
+        following_url,
+        repos_url,
+      } = data;
+      repoUrl = repos_url;
+      followerUrl = followers_url;
+      followingUrl = following_url.replace("{/other_user}", "");
 
-    profileCard.innerHTML = `
+      profileCard.innerHTML = `
     <figure
     class="${type == "User" ? "avatar-circle" : "avatar-rounded"} img-holder"
     style="--width: 280; --height: 280"
@@ -149,6 +151,7 @@ window.updateProfile = function (profileUrl) {
   ${name ? `<h1 class="title-2">${name}</h1>` : ""}
   <p class="username text-primary">${username}</p>
   ${bio ? `<p class="bio">${bio}</p>` : ""}
+
   <a href="${githubPageUrl}" target="_blank" class="btn btn-secondary"
     ><span class="material-symbols-rounded" aria-hidden="true"
       >open_in_new
@@ -213,12 +216,44 @@ window.updateProfile = function (profileUrl) {
   }
   
   </ul>
+    <ul class="profile-stats">
+
+      <li class="stats-item">
+        <span class="body">${public_repos}</span> Repos
+      </li>
+
+      <li class="stats-item">
+        <span class="body"></span> Followers
+      </li>
+
+      <li class="stats-item">
+        <span class="body"></span> Following
+      </li>
+
+  </ul>
   
   <div class="footer">
     <p class="copyright">&copy; ElvinWeb</p>
   </div>
     `;
-  });
+    
+      updateRepositories();
+    },
+    () => {
+      error.style.display = "grid";
+      document.body.style.overflowY = "hidden";
+
+      error.innerHTML = `
+      <p class="title-1">Oops! :(</p>
+
+      <p class="text">
+        There is no account with this username yet.
+      </p>
+    `;
+    }
+  );
 };
 
-// updateProfile(apiUrl);
+updateProfile(apiUrl);
+
+const updateRepositories = function () {};
