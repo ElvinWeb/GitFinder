@@ -1,10 +1,4 @@
-import fetchData from "./api.js";
-
-const addEventOnElement = function ($elements, eventType, callback) {
-  for (const $item of $elements) {
-    $item.addEventListener(eventType, callback);
-  }
-};
+import { fetchData, addEventOnElement, numberToKilo } from "./module.js";
 
 const header = document.querySelector(".header");
 window.addEventListener("scroll", () => {
@@ -12,8 +6,6 @@ window.addEventListener("scroll", () => {
 });
 
 const searchToggler = document.querySelector(".search-toggler");
-const searchField = document.querySelector(".search-field");
-const searchBtn = document.querySelector(".search-btn");
 let isExpanded = false;
 
 searchToggler.addEventListener("click", function () {
@@ -26,7 +18,6 @@ searchToggler.addEventListener("click", function () {
 
 const tabBtns = document.querySelectorAll(".tab-btn");
 const tabPanels = document.querySelectorAll(".tab-panel");
-
 let lastActiveTabBtn = tabBtns[0];
 let lastActiveTabPanel = tabPanels[0];
 
@@ -64,6 +55,8 @@ let repoUrl,
   followerUrl,
   followingUrl = "";
 
+const searchField = document.querySelector(".search-field");
+const searchBtn = document.querySelector(".search-btn");
 const searchUser = function () {
   if (!searchField.value) return;
   apiUrl = `https://api.github.com/users/${searchField.value}`;
@@ -114,7 +107,7 @@ window.updateProfile = function (profileUrl) {
       const {
         type,
         avatar_url,
-        page_url: githubPageUrl,
+        html_url: githubPageUrl,
         name,
         bio,
         login: username,
@@ -223,11 +216,11 @@ window.updateProfile = function (profileUrl) {
       </li>
 
       <li class="stats-item">
-        <span class="body"></span> Followers
+        <span class="body">${numberToKilo(followers)}</span> Followers
       </li>
 
       <li class="stats-item">
-        <span class="body"></span> Following
+        <span class="body">${numberToKilo(following)}</span> Following
       </li>
 
   </ul>
@@ -236,7 +229,7 @@ window.updateProfile = function (profileUrl) {
     <p class="copyright">&copy; ElvinWeb</p>
   </div>
     `;
-    
+
       updateRepositories();
     },
     () => {
@@ -255,5 +248,65 @@ window.updateProfile = function (profileUrl) {
 };
 
 updateProfile(apiUrl);
+let forkedRepos = [];
 
-const updateRepositories = function () {};
+const updateRepositories = function () {
+  fetchData(`${repoUrl}?sort=created&per_page=12`, function (data) {
+    repoPanel.innerHTML = `<h2 class="sr-only">Repositories</h2>`;
+    forkedRepos = data.filter((item) => item.fork);
+    const repositories = data.filter((i) => !i.fork);
+    if (repositories.length && repositories.length > 0) {
+      for (const repo of repositories) {
+        const {
+          name,
+          html_url,
+          description,
+          private: isPrivate,
+          language,
+          stargazers_count: stars_count,
+          forks_count,
+        } = repo;
+
+        const repoCard = document.createElement("article");
+        repoCard.classList.add("card", "repo-card");
+
+        repoCard.innerHTML = `
+        <div class="card-body">
+          <a href="${html_url}" class="card-title" target="_blank">
+            <h3 class="title-3">${name}</h3>
+          </a>
+          ${description ? `<p class="card-text">${description}</p>` : ""}
+          <span class="badge">${isPrivate ? "Private" : "Public"}</span>
+        </div>
+        <div class="card-footer">
+        ${
+          language
+            ? ` <div class="meta-item">
+            <span class="material-symbols-rounded" aria-hidden="true">code_blocks</span>
+            <span class="span">${language}</span>
+          </div>`
+            : ""
+        }
+          <div class="meta-item">
+            <span class="material-symbols-rounded" aria-hidden="true">star_rate</span>
+            <span class="span">${numberToKilo(stars_count)}</span>
+          </div>
+          <div class="meta-item">
+            <span class="material-symbols-rounded" aria-hidden="true">family_history</span>
+            <span class="span">${numberToKilo(forks_count)}</span>
+          </div>
+        </div>
+        `;
+
+        repoPanel.appendChild(repoCard);
+      }
+    } else {
+      repoPanel.innerHTML = `
+      <div class="error-content">
+        <p class="title-1">Oops!</p>
+        <p class="text">Doesn't have the any Forked repositories yet</p>
+      </div>
+      `;
+    }
+  });
+};

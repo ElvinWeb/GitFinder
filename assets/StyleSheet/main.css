@@ -797,3 +797,87 @@ body {
 .footer .copyright {
   color: var(--on-surface-2);
 }
+/* --------------- Media Queries ------------- */
+@media only screen and (min-width: 768px) {
+  :root {
+    --header-height: 80px;
+  }
+
+  body {
+    padding-block: calc(var(--header-height) + 16px) 32px;
+  }
+
+  .container {
+    padding-inline: 36px;
+  }
+
+  .card {
+    --spacing: 24px;
+  }
+
+  .avatar-skeleton {
+    width: 200px;
+    height: 200px;
+  }
+
+  .search-btn .material-symbols-rounded,
+  .search-toggler {
+    display: none;
+  }
+
+  .search-box .leading-icon,
+  .search-btn .label-1,
+  .header:not(.search-active) .search-box {
+    display: block;
+  }
+
+  .search-box .leading-icon {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+  }
+
+  .search-field {
+    padding-inline: 56px 88px;
+  }
+
+  .search-btn {
+    width: max-content;
+    padding-inline: 16px;
+  }
+
+  .header-search {
+    max-width: 360px;
+  }
+
+  .main .container {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 36px;
+    align-items: flex-start;
+  }
+
+  .profile :where(.avatar-circle, .avatar-rounded) {
+    width: 200px;
+  }
+
+  .profile {
+    margin-block-end: 0;
+    position: sticky;
+    top: calc(var(--header-height) + 16px);
+  }
+
+  .profile .footer {
+    display: block;
+    margin-block-start: 24px;
+  }
+  .tab-container .tab-list {
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  footer.footer {
+    display: none;
+  }
+}
