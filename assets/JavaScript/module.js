@@ -8,13 +8,11 @@ export async function fetchData(url, successCallback, errorCallBack) {
     errorCallBack(error);
   }
 }
-
 export const addEventOnElement = function ($elements, eventType, callback) {
   for (const $item of $elements) {
     $item.addEventListener(eventType, callback);
   }
 };
-
 export const numberToKilo = function (number) {
   let numStr = number.toString();
 

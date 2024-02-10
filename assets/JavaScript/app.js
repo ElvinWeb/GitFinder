@@ -1,25 +1,29 @@
 import { fetchData, addEventOnElement, numberToKilo } from "./module.js";
 
 const header = document.querySelector(".header");
-window.addEventListener("scroll", () => {
-  header.classList[window.screenY > 50 ? "add" : "remove"]("active");
-});
-
 const searchToggler = document.querySelector(".search-toggler");
-let isExpanded = false;
-
-searchToggler.addEventListener("click", function () {
-  header.classList.toggle("search-active");
-  isExpanded = isExpanded ? true : false;
-  this.setAttribute("aria-expanded", isExpanded);
-
-  searchField.focus();
-});
-
 const tabBtns = document.querySelectorAll(".tab-btn");
 const tabPanels = document.querySelectorAll(".tab-panel");
+const searchField = document.querySelector(".search-field");
+const searchBtn = document.querySelector(".search-btn");
+const profileCard = document.querySelector(".profile");
+const repoPanel = document.getElementById("panel-1");
+const error = document.querySelector(".error");
+const forkedRepoPanel = document.getElementById("panel-2");
+const forkedTabBtn = document.getElementById("tab-2");
+const followerRepoPanel = document.getElementById("panel-3");
+const followerTabBtn = document.getElementById("tab-3");
+const followingRepoPanel = document.getElementById("panel-4");
+const followingTabBtn = document.getElementById("tab-4");
+
+let forkedRepos = [];
+let apiUrl = "https://api.github.com/users/ElvinWeb";
+let repoUrl,
+  followerUrl,
+  followingUrl = "";
 let lastActiveTabBtn = tabBtns[0];
 let lastActiveTabPanel = tabPanels[0];
+let isExpanded = false;
 
 addEventOnElement(tabBtns, "click", function () {
   lastActiveTabBtn.setAttribute("aria-selected", "false");
@@ -35,7 +39,6 @@ addEventOnElement(tabBtns, "click", function () {
   lastActiveTabBtn = this;
   lastActiveTabPanel = currentTabPanel;
 });
-
 addEventOnElement(tabBtns, "keydown", function (e) {
   const nextElement = this.nextElementSibling;
   const previousElement = this.previousElementSibling;
@@ -50,31 +53,12 @@ addEventOnElement(tabBtns, "keydown", function (e) {
   }
 });
 
-let apiUrl = "https://api.github.com/users/ElvinWeb";
-let repoUrl,
-  followerUrl,
-  followingUrl = "";
-
-const searchField = document.querySelector(".search-field");
-const searchBtn = document.querySelector(".search-btn");
-
 const searchUser = function () {
   if (!searchField.value) return;
   apiUrl = `https://api.github.com/users/${searchField.value}`;
 
   updateProfile(apiUrl);
 };
-
-searchBtn.addEventListener("click", searchUser);
-
-searchField.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") searchUser();
-});
-
-const profileCard = document.querySelector(".profile");
-const repoPanel = document.getElementById("panel-1");
-const error = document.querySelector(".error");
-
 window.updateProfile = function (profileUrl) {
   error.style.display = "none";
   document.body.style.overflow = "visible";
@@ -249,9 +233,7 @@ window.updateProfile = function (profileUrl) {
     }
   );
 };
-
 updateProfile(apiUrl);
-let forkedRepos = [];
 const updateRepositories = function () {
   fetchData(`${repoUrl}?sort=created&per_page=12`, function (data) {
     repoPanel.innerHTML = `<h2 class="sr-only">Repositories</h2>`;
@@ -313,10 +295,6 @@ const updateRepositories = function () {
     }
   });
 };
-
-const forkedRepoPanel = document.getElementById("panel-2");
-const forkedTabBtn = document.getElementById("tab-2");
-
 const updateForkRepositories = function () {
   forkedRepoPanel.innerHTML = `<h2 class="sr-only">Forked Repositories</h2>`;
 
@@ -374,11 +352,6 @@ const updateForkRepositories = function () {
     `;
   }
 };
-forkedTabBtn.addEventListener("click", updateForkRepositories);
-
-const followerRepoPanel = document.getElementById("panel-3");
-const followerTabBtn = document.getElementById("tab-3");
-
 const updateFollowerRepositories = function () {
   followerRepoPanel.innerHTML = `
     <div class="card follower-skeleton">
@@ -423,12 +396,6 @@ const updateFollowerRepositories = function () {
     }
   });
 };
-
-followerTabBtn.addEventListener("click", updateFollowerRepositories);
-
-const followingRepoPanel = document.getElementById("panel-4");
-const followingTabBtn = document.getElementById("tab-4");
-
 const updateFollowingRepositories = function () {
   followingRepoPanel.innerHTML = `
     <div class="card follower-skeleton">
@@ -472,5 +439,20 @@ const updateFollowingRepositories = function () {
     }
   });
 };
-
+followerTabBtn.addEventListener("click", updateFollowerRepositories);
+forkedTabBtn.addEventListener("click", updateForkRepositories);
 followingTabBtn.addEventListener("click", updateFollowingRepositories);
+searchBtn.addEventListener("click", searchUser);
+window.addEventListener("scroll", () => {
+  header.classList[window.screenY > 50 ? "add" : "remove"]("active");
+});
+searchToggler.addEventListener("click", function () {
+  header.classList.toggle("search-active");
+  isExpanded = isExpanded ? false : true;
+  this.setAttribute("aria-expanded", isExpanded);
+
+  searchField.focus();
+});
+searchField.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") searchUser();
+});
