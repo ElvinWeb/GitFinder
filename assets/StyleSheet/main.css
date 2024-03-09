@@ -62,6 +62,7 @@
   --alpha-10-light: hsla(0, 0%, 0%, 0.1);
   --alpha-5-light: hsla(0, 0%, 0%, 0.05);
   --overlay-bg-light: hsla(220, 8%, 56%, 0.5);
+  --shadow-1: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 
   /* ------------Typography------------ */
 
@@ -315,6 +316,7 @@ body {
   display: flex;
   align-items: center;
   transition: background-color var(--transition-short);
+  box-shadow: var(--shadow-1);
   z-index: 4;
 }
 .header.active {
@@ -352,6 +354,9 @@ body {
 [data-theme="light"] .theme-btn .sun-icon {
   display: none;
 }
+.main{
+  margin-top: 40px;
+}
 
 /* ------------------Icon button----------------- */
 .icon-btn {
@@ -375,7 +380,7 @@ body {
 }
 /* --------------------Search box----------------- */
 .search-box .leading-icon,
-.search-btn .label-1{
+.search-btn .label-1 {
   display: none;
 }
 .search-box {
