@@ -1,4 +1,4 @@
-import { html, isDark, isPressed, themeBtn } from "./app.js";
+import { html, isDark, themeBtn } from "./app.js";
 
 if (sessionStorage.getItem("theme")) {
   html.dataset.theme = sessionStorage.getItem("theme");
