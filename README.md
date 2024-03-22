@@ -1,1 +1,1 @@
-<h3>#GitHub clone Application</h3>
+<h3>#GitFinder // Find a GitHub profile in seconds</h3>
