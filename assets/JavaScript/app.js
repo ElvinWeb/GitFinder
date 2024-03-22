@@ -1,7 +1,5 @@
 import { fetchData, addEventOnElement, numberToKilo } from "./module.js";
-export const html = document.documentElement;
-export const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-export const themeBtn = document.querySelector(".theme-btn");
+
 const GitHubApp = (function () {
   //private variables and functions
   const header = document.querySelector(".header");
@@ -19,6 +17,9 @@ const GitHubApp = (function () {
   const followerTabBtn = document.getElementById("tab-3");
   const followingRepoPanel = document.getElementById("panel-4");
   const followingTabBtn = document.getElementById("tab-4");
+  const themeBtn = document.querySelector(".theme-btn");
+  const html = document.documentElement;
+  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   let forkedRepos = [];
   let apiUrl = "https://api.github.com/users/ElvinWeb";
   let repoUrl,
@@ -27,6 +28,13 @@ const GitHubApp = (function () {
   let lastActiveTabBtn = tabBtns[0];
   let lastActiveTabPanel = tabPanels[0];
   let isExpanded = false;
+  if (sessionStorage.getItem("theme")) {
+    html.dataset.theme = sessionStorage.getItem("theme");
+  } else {
+    html.dataset.theme = isDark ? "dark" : "light";
+  }
+
+  
 
   const _updateProfile = function (profileUrl) {
     error.style.display = "none";
@@ -412,6 +420,13 @@ const GitHubApp = (function () {
       }
     });
   };
+  const _changeTheme = function () {
+    html.setAttribute(
+      "data-theme",
+      html.dataset.theme === "light" ? "dark" : "light"
+    );
+    sessionStorage.setItem("theme", html.dataset.theme);
+  };
   const init = function () {
     addEventOnElement(tabBtns, "click", function () {
       lastActiveTabBtn.setAttribute("aria-selected", "false");
@@ -457,6 +472,9 @@ const GitHubApp = (function () {
     });
     searchField.addEventListener("keydown", (e) => {
       if (e.key === "Enter") _searchUser();
+    });
+    window.addEventListener("load", () => {
+      themeBtn.addEventListener("click", _changeTheme);
     });
   };
 
