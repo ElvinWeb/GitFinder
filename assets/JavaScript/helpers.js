@@ -1,10 +1,13 @@
 export async function fetchData(url, successCallback, errorCallBack) {
-  const response = await fetch(url);
-  if (response.ok) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Failed to fetch");
+    }
+
     const data = await response.json();
     successCallback(data);
-  } else {
-    const error = await response.json();
+  } catch (error) {
     errorCallBack(error);
   }
 }

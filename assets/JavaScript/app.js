@@ -1,4 +1,4 @@
-import { fetchData, addEventOnElement, numberToKilo } from "./module.js";
+import { fetchData, addEventOnElement, numberToKilo } from "./helpers.js";
 
 const GitHubApp = (function () {
   //private variables and functions
@@ -34,8 +34,6 @@ const GitHubApp = (function () {
     html.dataset.theme = isDark ? "dark" : "light";
   }
 
-  
-
   const _updateProfile = function (profileUrl) {
     error.style.display = "none";
     document.body.style.overflow = "visible";
@@ -65,150 +63,130 @@ const GitHubApp = (function () {
         </div>
     `.repeat(6);
 
-    fetchData(
-      profileUrl,
-      (data) => {
-        const {
-          type,
-          avatar_url,
-          html_url: githubPageUrl,
-          name,
-          bio,
-          login: username,
-          location,
-          company,
-          blog: website,
-          twitter_username,
-          public_repos,
-          followers,
-          following,
-          followers_url,
-          following_url,
-          repos_url,
-        } = data;
-        repoUrl = repos_url;
-        followerUrl = followers_url;
-        followingUrl = following_url.replace("{/other_user}", "");
+    fetchData(profileUrl, _profile, _notFound);
+  };
+  const _profile = function (data) {
+    const {
+      type,
+      avatar_url,
+      html_url: githubPageUrl,
+      name,
+      bio,
+      login: username,
+      location,
+      company,
+      blog: website,
+      twitter_username,
+      public_repos,
+      followers,
+      following,
+      followers_url,
+      following_url,
+      repos_url,
+    } = data;
 
-        profileCard.innerHTML = `
-      <figure
-      class="${type == "User" ? "avatar-circle" : "avatar-rounded"} img-holder"
-      style="--width: 280; --height: 280"
-    >
-      <img
-        src="${avatar_url}"
-        alt=""
-        width="280"
-        height="280"
-        class="img-cover"
-        alt="${username}"
-      />
-    </figure>
-  
-    ${name ? `<h1 class="title-2">${name}</h1>` : ""}
-    <p class="username text-primary">${username}</p>
-    ${bio ? `<p class="bio">${bio}</p>` : ""}
-  
-    <a href="${githubPageUrl}" target="_blank" class="btn btn-secondary"
-      ><span class="material-symbols-rounded" aria-hidden="true"
-        >open_in_new
-      </span>
-  
-      <span>See on GitHub</span></a
-    >
-    <ul class="profile-meta">
-    ${
-      location
-        ? `
-      <li class="meta-item">
-          <span class="material-symbols-rounded" aria-hidden="true">location_on</span>
-          <span class="meta-text">${location}</span>
-      </li>`
-        : ""
-    }
-    ${
-      company
-        ? `
-        <li class="meta-item">
-          <span class="material-symbols-rounded" aria-hidden="true">apartment</span>
-          <span class="meta-text">${company}</span>
-      </li>`
-        : ""
-    }
-  
-    ${
-      website
-        ? `
-        <li class="meta-item">
-            <span class="material-symbols-rounded" aria-hidden="true">captive_portal</span>
-            <a href="${website}" target="_blank" class="meta-text">${website.replace(
-            "https://",
-            ""
-          )}</a>
-        </li>`
-        : ""
-    }
-  
-    ${
-      twitter_username
-        ? `
-        <li class="meta-item">
-        <span class="icon">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M18.75 8.0625C18.75 6.50859 17.4914 5.25 15.9375 5.25C14.3836 5.25 13.125 6.50859 13.125 8.0625C13.125 9.34219 13.9793 10.4215 15.1465 10.7625C15.1254 11.3285 14.9988 11.7645 14.7598 12.0598C14.2184 12.7348 13.0266 12.8473 11.7645 12.9633C10.773 13.0547 9.74648 13.1531 8.90625 13.5574V8.49492C10.0488 8.13633 10.875 7.07109 10.875 5.8125C10.875 4.25859 9.61641 3 8.0625 3C6.50859 3 5.25 4.25859 5.25 5.8125C5.25 7.07109 6.07617 8.13633 7.21875 8.49492V15.5016C6.07617 15.8637 5.25 16.9289 5.25 18.1875C5.25 19.7414 6.50859 21 8.0625 21C9.61641 21 10.875 19.7414 10.875 18.1875C10.875 16.9922 10.1297 15.9691 9.075 15.5648C9.18398 15.382 9.34922 15.2203 9.59883 15.0938C10.1684 14.8055 11.0191 14.7281 11.9227 14.6438C13.4062 14.5066 15.0867 14.3484 16.0781 13.118C16.5703 12.5062 16.8199 11.7188 16.8375 10.7309C17.9484 10.3512 18.75 9.3 18.75 8.0625ZM8.0625 5.25C8.37188 5.25 8.625 5.50312 8.625 5.8125C8.625 6.12188 8.37188 6.375 8.0625 6.375C7.75312 6.375 7.5 6.12188 7.5 5.8125C7.5 5.50312 7.75312 5.25 8.0625 5.25ZM8.0625 18.75C7.75312 18.75 7.5 18.4969 7.5 18.1875C7.5 17.8781 7.75312 17.625 8.0625 17.625C8.37188 17.625 8.625 17.8781 8.625 18.1875C8.625 18.4969 8.37188 18.75 8.0625 18.75ZM15.9375 7.5C16.2469 7.5 16.5 7.75313 16.5 8.0625C16.5 8.37187 16.2469 8.625 15.9375 8.625C15.6281 8.625 15.375 8.37187 15.375 8.0625C15.375 7.75313 15.6281 7.5 15.9375 7.5Z"
-              fill="#ABB2C2"
-            />
-          </svg>
-        </span>
-        <a href="https://twitter.com/${twitter_username}" target="_blank" class="meta-text">${twitter_username}}</a>
-      </li>`
-        : ""
-    }
-    
-    </ul>
-      <ul class="profile-stats">
-  
-        <li class="stats-item">
-          <span class="body">${public_repos}</span> Repos
-        </li>
-  
-        <li class="stats-item">
-          <span class="body">${numberToKilo(followers)}</span> Followers
-        </li>
-  
-        <li class="stats-item">
-          <span class="body">${numberToKilo(following)}</span> Following
-        </li>
-  
-    </ul>
-    
-    <div class="footer">
-      <p class="copyright">&copy; ElvinWeb</p>
-    </div>
-      `;
+    repoUrl = repos_url;
+    followerUrl = followers_url;
+    followingUrl = following_url.replace("{/other_user}", "");
+    profileCard.innerHTML = `
+  <figure
+  class="${type == "User" ? "avatar-circle" : "avatar-rounded"} img-holder"
+  style="--width: 280; --height: 280">
+    <img
+      src="${avatar_url}"
+      alt=""
+      width="280"
+      height="280"
+      class="img-cover"
+      alt="${username}"
+    />
+</figure>
 
-        _updateRepositories();
-      },
-      () => {
-        error.style.display = "grid";
-        document.body.style.overflowY = "hidden";
+${name ? `<h1 class="title-2">${name}</h1>` : ""}
+<p class="username text-primary">${username}</p>
+${bio ? `<p class="bio">${bio}</p>` : ""}
 
-        error.innerHTML = `
-        <p class="title-1">Oops! :(</p>
-  
-        <p class="text">
-          There is no account with this username yet.
-        </p>
-      `;
-      }
-    );
+<a href="${githubPageUrl}" target="_blank" class="btn btn-secondary"
+  ><span class="material-symbols-rounded" aria-hidden="true"
+    >open_in_new
+  </span>
+
+  <span>See on GitHub</span></a
+>
+<ul class="profile-meta">
+${
+  location
+    ? `
+  <li class="meta-item">
+      <span class="material-symbols-rounded" aria-hidden="true">location_on</span>
+      <span class="meta-text">${location}</span>
+  </li>`
+    : ""
+}
+${
+  company
+    ? `
+    <li class="meta-item">
+      <span class="material-symbols-rounded" aria-hidden="true">apartment</span>
+      <span class="meta-text">${company}</span>
+  </li>`
+    : ""
+}
+
+${
+  website
+    ? `
+    <li class="meta-item">
+        <span class="material-symbols-rounded" aria-hidden="true">captive_portal</span>
+        <a href="${website}" target="_blank" class="meta-text">${website.replace(
+        "https://",
+        ""
+      )}</a>
+    </li>`
+    : ""
+}
+
+${
+  twitter_username
+    ? `
+    <li class="meta-item">
+    <span class="icon">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M18.75 8.0625C18.75 6.50859 17.4914 5.25 15.9375 5.25C14.3836 5.25 13.125 6.50859 13.125 8.0625C13.125 9.34219 13.9793 10.4215 15.1465 10.7625C15.1254 11.3285 14.9988 11.7645 14.7598 12.0598C14.2184 12.7348 13.0266 12.8473 11.7645 12.9633C10.773 13.0547 9.74648 13.1531 8.90625 13.5574V8.49492C10.0488 8.13633 10.875 7.07109 10.875 5.8125C10.875 4.25859 9.61641 3 8.0625 3C6.50859 3 5.25 4.25859 5.25 5.8125C5.25 7.07109 6.07617 8.13633 7.21875 8.49492V15.5016C6.07617 15.8637 5.25 16.9289 5.25 18.1875C5.25 19.7414 6.50859 21 8.0625 21C9.61641 21 10.875 19.7414 10.875 18.1875C10.875 16.9922 10.1297 15.9691 9.075 15.5648C9.18398 15.382 9.34922 15.2203 9.59883 15.0938C10.1684 14.8055 11.0191 14.7281 11.9227 14.6438C13.4062 14.5066 15.0867 14.3484 16.0781 13.118C16.5703 12.5062 16.8199 11.7188 16.8375 10.7309C17.9484 10.3512 18.75 9.3 18.75 8.0625ZM8.0625 5.25C8.37188 5.25 8.625 5.50312 8.625 5.8125C8.625 6.12188 8.37188 6.375 8.0625 6.375C7.75312 6.375 7.5 6.12188 7.5 5.8125C7.5 5.50312 7.75312 5.25 8.0625 5.25ZM8.0625 18.75C7.75312 18.75 7.5 18.4969 7.5 18.1875C7.5 17.8781 7.75312 17.625 8.0625 17.625C8.37188 17.625 8.625 17.8781 8.625 18.1875C8.625 18.4969 8.37188 18.75 8.0625 18.75ZM15.9375 7.5C16.2469 7.5 16.5 7.75313 16.5 8.0625C16.5 8.37187 16.2469 8.625 15.9375 8.625C15.6281 8.625 15.375 8.37187 15.375 8.0625C15.375 7.75313 15.6281 7.5 15.9375 7.5Z"
+          fill="#ABB2C2"
+        />
+      </svg>
+    </span>
+    <a href="https://twitter.com/${twitter_username}" target="_blank" class="meta-text">${twitter_username}}</a>
+  </li>`
+    : ""
+}
+
+</ul>
+  <ul class="profile-stats">
+    <li class="stats-item">
+      <span class="body">${public_repos}</span> Repos
+    </li>
+    <li class="stats-item">
+      <span class="body">${numberToKilo(followers)}</span> Followers
+    </li>
+    <li class="stats-item">
+      <span class="body">${numberToKilo(following)}</span> Following
+    </li>
+</ul>
+
+<div class="footer">
+  <p class="copyright">&copy; ElvinWeb</p>
+</div>`;
+
+    _updateRepositories();
   };
   const _searchUser = function () {
     if (!searchField.value) return;
@@ -216,27 +194,29 @@ const GitHubApp = (function () {
     _updateProfile(apiUrl);
   };
   const _updateRepositories = function () {
-    fetchData(`${repoUrl}?sort=created&per_page=12`, function (data) {
-      repoPanel.innerHTML = `<h2 class="sr-only">Repositories</h2>`;
-      forkedRepos = data.filter((item) => item.fork);
-      const repositories = data.filter((i) => !i.fork);
+    fetchData(`${repoUrl}?sort=created&per_page=12`, _repositories);
+  };
+  const _repositories = function (data) {
+    repoPanel.innerHTML = `<h2 class="sr-only">Repositories</h2>`;
+    forkedRepos = data.filter((item) => item.fork);
+    const repositories = data.filter((i) => !i.fork);
 
-      if (repositories.length && repositories.length > 0) {
-        for (const repo of repositories) {
-          const {
-            name,
-            html_url,
-            description,
-            private: isPrivate,
-            language,
-            stargazers_count: stars_count,
-            forks_count,
-          } = repo;
+    if (repositories.length && repositories.length > 0) {
+      for (const repo of repositories) {
+        const {
+          name,
+          html_url,
+          description,
+          private: isPrivate,
+          language,
+          stargazers_count: stars_count,
+          forks_count,
+        } = repo;
 
-          const repoCard = document.createElement("article");
-          repoCard.classList.add("card", "repo-card");
+        const repoCard = document.createElement("article");
+        repoCard.classList.add("card", "repo-card");
 
-          repoCard.innerHTML = `
+        repoCard.innerHTML = `
           <div class="card-body">
             <a href="${html_url}" class="card-title" target="_blank">
               <h3 class="title-3">${name}</h3>
@@ -264,17 +244,16 @@ const GitHubApp = (function () {
           </div>
           `;
 
-          repoPanel.appendChild(repoCard);
-        }
-      } else {
-        repoPanel.innerHTML = `
+        repoPanel.appendChild(repoCard);
+      }
+    } else {
+      repoPanel.innerHTML = `
         <div class="error-content">
           <p class="title-1">Oops!</p>
           <p class="text">Doesn't have the any public repositories yet</p>
         </div>
         `;
-      }
-    });
+    }
   };
   const _updateForkRepositories = function () {
     forkedRepoPanel.innerHTML = `<h2 class="sr-only">Forked Repositories</h2>`;
@@ -341,17 +320,19 @@ const GitHubApp = (function () {
       </div>
     `.repeat(12);
 
-    fetchData(followerUrl, function (data) {
-      followerRepoPanel.innerHTML = `<h2 class="sr-only">Followers</h2>`;
+    fetchData(followerUrl, _followerRepositories);
+  };
+  const _followerRepositories = function (data) {
+    followerRepoPanel.innerHTML = `<h2 class="sr-only">Followers</h2>`;
 
-      if (data.length && data.length > 0) {
-        for (const item of data) {
-          const { login: username, avatar_url, url } = item;
+    if (data.length && data.length > 0) {
+      for (const item of data) {
+        const { login: username, avatar_url, url } = item;
 
-          const followerRepoCard = document.createElement("article");
-          followerRepoCard.classList.add("card", "follower-card");
+        const followerRepoCard = document.createElement("article");
+        followerRepoCard.classList.add("card", "follower-card");
 
-          followerRepoCard.innerHTML = ` 
+        followerRepoCard.innerHTML = ` 
             <figure class="avatar-circle img-holder">
               <img
                 src="${avatar_url}"
@@ -365,17 +346,16 @@ const GitHubApp = (function () {
             </button>
             `;
 
-          followerRepoPanel.appendChild(followerRepoCard);
-        }
-      } else {
-        followerRepoPanel.innerHTML = `
+        followerRepoPanel.appendChild(followerRepoCard);
+      }
+    } else {
+      followerRepoPanel.innerHTML = `
           <div class="error-content">
             <p class="title-1">Oops!</p>
             <p class="text">Doesn't have the any follower yet</p>
           </div>
         `;
-      }
-    });
+    }
   };
   const _updateFollowingRepositories = function () {
     followingRepoPanel.innerHTML = `
@@ -386,16 +366,18 @@ const GitHubApp = (function () {
       </div>
     `.repeat(12);
 
-    fetchData(followingUrl, function (data) {
-      followingRepoPanel.innerHTML = `<h2 class="sr-only">Following</h2>`;
-      if (data.length && data.length > 0) {
-        for (const item of data) {
-          const { login: username, avatar_url, url } = item;
+    fetchData(followingUrl, _followingRepositories);
+  };
+  const _followingRepositories = function (data) {
+    followingRepoPanel.innerHTML = `<h2 class="sr-only">Following</h2>`;
+    if (data.length && data.length > 0) {
+      for (const item of data) {
+        const { login: username, avatar_url, url } = item;
 
-          const followingRepoCard = document.createElement("article");
-          followingRepoCard.classList.add("card", "follower-card");
+        const followingRepoCard = document.createElement("article");
+        followingRepoCard.classList.add("card", "follower-card");
 
-          followingRepoCard.innerHTML = `
+        followingRepoCard.innerHTML = `
           <figure class="avatar-circle img-holder">
             <img src="${avatar_url}&s=64" width="56" height="56" loading="lazy" alt="${username}"
               class="img-cover">
@@ -407,18 +389,17 @@ const GitHubApp = (function () {
             <span class="material-symbols-rounded" aria-hidden="true">link</span>
           </button>`;
 
-          followingRepoPanel.appendChild(followingRepoCard);
-        }
-      } else {
-        followingRepoPanel.innerHTML = `
+        followingRepoPanel.appendChild(followingRepoCard);
+      }
+    } else {
+      followingRepoPanel.innerHTML = `
         <div class="error-content">
           <p class="title-1">Oops! :(</p>
           <p class="text">
             Doesn't have any following yet.
           </p>
         </div>`;
-      }
-    });
+    }
   };
   const _changeTheme = function () {
     html.setAttribute(
@@ -426,6 +407,16 @@ const GitHubApp = (function () {
       html.dataset.theme === "light" ? "dark" : "light"
     );
     sessionStorage.setItem("theme", html.dataset.theme);
+  };
+  const _notFound = function () {
+    error.style.display = "grid";
+    document.body.style.overflowY = "hidden";
+    error.innerHTML = `
+        <p class="title-1">Oops! :(</p>
+        <p class="text">
+          There is no account with this username yet.
+        </p>
+      `;
   };
   const init = function () {
     addEventOnElement(tabBtns, "click", function () {
