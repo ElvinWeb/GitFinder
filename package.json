@@ -2,7 +2,7 @@
   "name": "gitfinder",
   "version": "1.0.0",
   "description": "<h3>#GitFinder // Find a GitHub profile in seconds</h3>",
-  "main": "index.js",
+  "default": "index.html",
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html"
