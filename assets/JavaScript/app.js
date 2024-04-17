@@ -5,6 +5,9 @@ import {
   getTheme,
 } from "./helpers.js";
 
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+
 const GitHubApp = (function () {
   //Private variables and functions
   const header = document.querySelector(".header");
