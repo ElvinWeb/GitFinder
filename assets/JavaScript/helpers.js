@@ -1,3 +1,5 @@
+import { IS_DARK } from "./config.js";
+
 export async function fetchData(url, successCallback, errorCallBack) {
   try {
     const response = await fetch(url);
@@ -27,5 +29,12 @@ export const numberToKilo = function (number) {
     return `${numStr.slice(0, -3)}K`;
   } else {
     return `${numStr.slice(0, -6)}M`;
+  }
+};
+export const getTheme = function () {
+  if (sessionStorage.getItem("theme")) {
+    document.documentElement.dataset.theme = sessionStorage.getItem("theme");
+  } else {
+    document.documentElement.dataset.theme = IS_DARK ? "dark" : "light";
   }
 };

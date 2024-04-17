@@ -1,7 +1,12 @@
-import { fetchData, addEventOnElement, numberToKilo } from "./helpers.js";
+import {
+  fetchData,
+  addEventOnElement,
+  numberToKilo,
+  getTheme,
+} from "./helpers.js";
 
 const GitHubApp = (function () {
-  //private variables and functions
+  //Private variables and functions
   const header = document.querySelector(".header");
   const searchToggler = document.querySelector(".search-toggler");
   const tabBtns = document.querySelectorAll(".tab-btn");
@@ -19,7 +24,6 @@ const GitHubApp = (function () {
   const followingTabBtn = document.getElementById("tab-4");
   const themeBtn = document.querySelector(".theme-btn");
   const html = document.documentElement;
-  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   let forkedRepos = [];
   let apiUrl = "https://api.github.com/users/ElvinWeb";
   let repoUrl,
@@ -28,11 +32,6 @@ const GitHubApp = (function () {
   let lastActiveTabBtn = tabBtns[0];
   let lastActiveTabPanel = tabPanels[0];
   let isExpanded = false;
-  if (sessionStorage.getItem("theme")) {
-    html.dataset.theme = sessionStorage.getItem("theme");
-  } else {
-    html.dataset.theme = isDark ? "dark" : "light";
-  }
 
   const _updateProfile = function (profileUrl) {
     error.style.display = "none";
@@ -422,7 +421,6 @@ ${
     addEventOnElement(tabBtns, "click", function () {
       lastActiveTabBtn.setAttribute("aria-selected", "false");
       lastActiveTabPanel.setAttribute("hidden", "");
-
       this.setAttribute("aria-selected", "true");
 
       const currentTabPanel = document.querySelector(
@@ -447,12 +445,13 @@ ${
       }
     });
     _updateProfile(apiUrl);
+    getTheme();
     followerTabBtn.addEventListener("click", _updateFollowerRepositories);
     forkedTabBtn.addEventListener("click", _updateForkRepositories);
     followingTabBtn.addEventListener("click", _updateFollowingRepositories);
     searchBtn.addEventListener("click", _searchUser);
     window.addEventListener("scroll", () => {
-      header.classList[window.screenY > 50 ? "add" : "remove"]("active");
+      header.classList.toggle("active", scrollY > 60);
     });
     searchToggler.addEventListener("click", function () {
       header.classList.toggle("search-active");

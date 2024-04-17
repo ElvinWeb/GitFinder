@@ -316,7 +316,6 @@ body {
   display: flex;
   align-items: center;
   transition: background-color var(--transition-short);
-  box-shadow: var(--shadow-1);
   z-index: 4;
 }
 .header.active {
@@ -887,7 +886,7 @@ body {
     display: none;
   }
 }
-@media (min-width: 992px) {
+@media only screen and (min-width: 992px) {
   .container {
     padding-inline: 32px;
   }
@@ -905,7 +904,7 @@ body {
     width: 280px;
   }
 }
-@media (min-width: 1080px) {
+@media only screen and (min-width: 1080px) {
   .tab-panel .card {
     max-width: calc(50% - 8px);
   }
