@@ -5,7 +5,7 @@ import {
   getTheme,
 } from "./helpers.js";
 
-import "core-js/stable";
+import "core-js/actual";
 import "regenerator-runtime/runtime";
 
 const GitHubApp = (function () {
