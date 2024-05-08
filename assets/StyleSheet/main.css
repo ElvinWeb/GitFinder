@@ -313,6 +313,7 @@ body {
   width: 100%;
   background-color: var(--background);
   height: var(--header-height);
+  border-bottom: 1px solid var(--surface-variant);
   display: flex;
   align-items: center;
   transition: background-color var(--transition-short);
