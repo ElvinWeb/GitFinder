@@ -4,43 +4,44 @@ import {
   numberToKilo,
   getTheme,
 } from "./helpers.js";
+import { BASE_API_URL } from "./config.js";
 
 import "core-js/actual";
 import "regenerator-runtime/runtime";
 
 const GitHubApp = (function () {
-  //Private variables and functions
-  const header = document.querySelector(".header");
-  const searchToggler = document.querySelector(".search-toggler");
-  const tabBtns = document.querySelectorAll(".tab-btn");
-  const tabPanels = document.querySelectorAll(".tab-panel");
-  const searchField = document.querySelector(".search-field");
-  const searchBtn = document.querySelector(".search-btn");
-  const profileCard = document.querySelector(".profile");
-  const repoPanel = document.getElementById("panel-1");
-  const error = document.querySelector(".error");
-  const forkedRepoPanel = document.getElementById("panel-2");
-  const forkedTabBtn = document.getElementById("tab-2");
-  const followerRepoPanel = document.getElementById("panel-3");
-  const followerTabBtn = document.getElementById("tab-3");
-  const followingRepoPanel = document.getElementById("panel-4");
-  const followingTabBtn = document.getElementById("tab-4");
-  const themeBtn = document.querySelector(".theme-btn");
-  const html = document.documentElement;
-  let forkedRepos = [];
-  let apiUrl = "https://api.github.com/users/ElvinWeb";
-  let repoUrl,
-    followerUrl,
-    followingUrl = "";
-  let lastActiveTabBtn = tabBtns[0];
-  let lastActiveTabPanel = tabPanels[0];
-  let isExpanded = false;
+  // Private variables and functions
+  const _header = document.querySelector(".header");
+  const _searchToggler = document.querySelector(".search-toggler");
+  const _tabBtns = document.querySelectorAll(".tab-btn");
+  const _tabPanels = document.querySelectorAll(".tab-panel");
+  const _searchField = document.querySelector(".search-field");
+  const _searchBtn = document.querySelector(".search-btn");
+  const _profileCard = document.querySelector(".profile");
+  const _repoPanel = document.getElementById("panel-1");
+  const _error = document.querySelector(".error");
+  const _forkedRepoPanel = document.getElementById("panel-2");
+  const _forkedTabBtn = document.getElementById("tab-2");
+  const _followerRepoPanel = document.getElementById("panel-3");
+  const _followerTabBtn = document.getElementById("tab-3");
+  const _followingRepoPanel = document.getElementById("panel-4");
+  const _followingTabBtn = document.getElementById("tab-4");
+  const _themeBtn = document.querySelector(".theme-btn");
+  const _html = document.documentElement;
+  let _forkedRepos = [];
+  let _apiUrl = `${BASE_API_URL}ElvinWeb`;
+  let _repoUrl,
+    _followerUrl,
+    _followingUrl = "";
+  let _lastActiveTabBtn = _tabBtns[0];
+  let _lastActiveTabPanel = _tabPanels[0];
 
+  //fetched data from api url sended to _profile method
   const _updateProfile = function (profileUrl) {
-    error.style.display = "none";
+    _error.style.display = "none";
     document.body.style.overflow = "visible";
 
-    profileCard.innerHTML = `
+    _profileCard.innerHTML = `
       <ul class="profile-stats">
         <li class="stats-items"><span class="body">142</span>Repos</li>
         <li class="stats-items"><span class="body">1.8k</span>Followers</li>
@@ -48,9 +49,9 @@ const GitHubApp = (function () {
         <li class="stats-items"><span class="body">142</span>Repos</li>
       </ul>
     `;
-    tabBtns[0].click();
+    _tabBtns[0].click();
 
-    repoPanel.innerHTML = `
+    _repoPanel.innerHTML = `
         <div class="card repo-skeleton">
             <div class="card-body">
                 <div class="skeleton title-skeleton"></div>
@@ -67,6 +68,7 @@ const GitHubApp = (function () {
 
     fetchData(profileUrl, _profile, _notFound);
   };
+  //user profile UI created dynamically with fetched data
   const _profile = function (data) {
     const {
       type,
@@ -87,10 +89,10 @@ const GitHubApp = (function () {
       repos_url,
     } = data;
 
-    repoUrl = repos_url;
-    followerUrl = followers_url;
-    followingUrl = following_url.replace("{/other_user}", "");
-    profileCard.innerHTML = `
+    _repoUrl = repos_url;
+    _followerUrl = followers_url;
+    _followingUrl = following_url.replace("{/other_user}", "");
+    _profileCard.innerHTML = `
   <figure
   class="${type == "User" ? "avatar-circle" : "avatar-rounded"} img-holder"
   style="--width: 280; --height: 280">
@@ -186,21 +188,24 @@ ${
 
 <div class="footer">
   <p class="copyright">&copy; ElvinWeb</p>
-</div>`;
+    </div>`;
 
     _updateRepositories();
   };
+  //user profile UI updated according to searchfield value
   const _searchUser = function () {
-    if (!searchField.value) return;
-    apiUrl = `https://api.github.com/users/${searchField.value}`;
-    _updateProfile(apiUrl);
+    if (!_searchField.value) return;
+    _apiUrl = `${BASE_API_URL}${_searchField.value}`;
+    _updateProfile(_apiUrl);
   };
+  //fetched data from api url sended to _repositories method
   const _updateRepositories = function () {
-    fetchData(`${repoUrl}?sort=created&per_page=12`, _repositories);
+    fetchData(`${_repoUrl}?sort=created&per_page=12`, _repositories);
   };
+  //profile repositories created dynamically with fetched data
   const _repositories = function (data) {
-    repoPanel.innerHTML = `<h2 class="sr-only">Repositories</h2>`;
-    forkedRepos = data.filter((item) => item.fork);
+    _repoPanel.innerHTML = `<h2 class="sr-only">Repositories</h2>`;
+    _forkedRepos = data.filter((item) => item.fork);
     const repositories = data.filter((i) => !i.fork);
 
     if (repositories.length && repositories.length > 0) {
@@ -246,22 +251,18 @@ ${
           </div>
           `;
 
-        repoPanel.appendChild(repoCard);
+        _repoPanel.appendChild(repoCard);
       }
     } else {
-      repoPanel.innerHTML = `
-        <div class="error-content">
-          <p class="title-1">Oops!</p>
-          <p class="text">Doesn't have the any public repositories yet</p>
-        </div>
-        `;
+      _errorMessage(_repoPanel, "Doesn't have the any public repositories yet");
     }
   };
+  //profile fork repositories created dynamically with fetched data
   const _updateForkRepositories = function () {
-    forkedRepoPanel.innerHTML = `<h2 class="sr-only">Forked Repositories</h2>`;
+    _forkedRepoPanel.innerHTML = `<h2 class="sr-only">Forked Repositories</h2>`;
 
-    if (forkedRepos.length && forkedRepos.length > 0) {
-      for (const repo of forkedRepos) {
+    if (_forkedRepos.length && _forkedRepos.length > 0) {
+      for (const repo of _forkedRepos) {
         const {
           name,
           html_url,
@@ -303,29 +304,29 @@ ${
         </div>
         `;
 
-        forkedRepoPanel.appendChild(forkedRepoCard);
+        _forkedRepoPanel.appendChild(forkedRepoCard);
       }
     } else {
-      forkedRepoPanel.innerHTML = `
-      <div class="error-content">
-        <p class="title-1">Oops!</p>
-        <p class="text">Doesn't have the any Forked repositories yet</p>
-      </div>
-      `;
+      _errorMessage(
+        _forkedRepoPanel,
+        "Doesn't have the any Forked repositories yet"
+      );
     }
   };
+  //fetched data from api url sended to _followerRepositories method
   const _updateFollowerRepositories = function () {
-    followerRepoPanel.innerHTML = `
+    _followerRepoPanel.innerHTML = `
       <div class="card follower-skeleton">
         <div class="avatar-skeleton skeleton"></div>
         <div class="title-skeleton skeleton"></div>
       </div>
     `.repeat(12);
 
-    fetchData(followerUrl, _followerRepositories);
+    fetchData(_followerUrl, _followerRepositories);
   };
+  //profile follower repositories created dynamically with fetched data
   const _followerRepositories = function (data) {
-    followerRepoPanel.innerHTML = `<h2 class="sr-only">Followers</h2>`;
+    _followerRepoPanel.innerHTML = `<h2 class="sr-only">Followers</h2>`;
 
     if (data.length && data.length > 0) {
       for (const item of data) {
@@ -348,19 +349,15 @@ ${
             </button>
             `;
 
-        followerRepoPanel.appendChild(followerRepoCard);
+        _followerRepoPanel.appendChild(followerRepoCard);
       }
     } else {
-      followerRepoPanel.innerHTML = `
-          <div class="error-content">
-            <p class="title-1">Oops!</p>
-            <p class="text">Doesn't have the any follower yet</p>
-          </div>
-        `;
+      _errorMessage(_followerRepoPanel, "Doesn't have the any follower yet");
     }
   };
+  //fetched data from api url sended to _followingRepositories method
   const _updateFollowingRepositories = function () {
-    followingRepoPanel.innerHTML = `
+    _followingRepoPanel.innerHTML = `
       <div class="card follower-skeleton">
         <div class="skeleton avatar-skeleton"></div>
   
@@ -368,10 +365,11 @@ ${
       </div>
     `.repeat(12);
 
-    fetchData(followingUrl, _followingRepositories);
+    fetchData(_followingUrl, _followingRepositories);
   };
+  //profile following repositories created dynamically with fetched data
   const _followingRepositories = function (data) {
-    followingRepoPanel.innerHTML = `<h2 class="sr-only">Following</h2>`;
+    _followingRepoPanel.innerHTML = `<h2 class="sr-only">Following</h2>`;
     if (data.length && data.length > 0) {
       for (const item of data) {
         const { login: username, avatar_url, url } = item;
@@ -391,83 +389,89 @@ ${
             <span class="material-symbols-rounded" aria-hidden="true">link</span>
           </button>`;
 
-        followingRepoPanel.appendChild(followingRepoCard);
+        _followingRepoPanel.appendChild(followingRepoCard);
       }
     } else {
-      followingRepoPanel.innerHTML = `
-        <div class="error-content">
-          <p class="title-1">Oops! :(</p>
-          <p class="text">
-            Doesn't have any following yet.
-          </p>
-        </div>`;
+      _errorMessage(_followerRepoPanel, "Doesn't have any following yet.");
     }
   };
+  //light and dark mode state changer
   const _changeTheme = function () {
-    html.setAttribute(
+    _html.setAttribute(
       "data-theme",
-      html.dataset.theme === "light" ? "dark" : "light"
+      _html.dataset.theme === "light" ? "dark" : "light"
     );
-    sessionStorage.setItem("theme", html.dataset.theme);
+    sessionStorage.setItem("theme", _html.dataset.theme);
   };
+  //user not found message renderer
   const _notFound = function () {
-    error.style.display = "grid";
+    _error.style.display = "grid";
     document.body.style.overflowY = "hidden";
-    error.innerHTML = `
+    _error.innerHTML = `
         <p class="title-1">Oops! :(</p>
         <p class="text">
           There is no account with this username yet.
         </p>
       `;
   };
+  //generic error message renderer
+  const _errorMessage = function (repoElement, message) {
+    return (repoElement.innerHTML = `
+        <div class="error-content">
+          <p class="title-1">Oops! :(</p>
+          <p class="text">${message}</p>
+        </div>`);
+  };
+  //controling tabs with direction keys
+  const _tabControl = function (e) {
+    const nextElement = this.nextElementSibling;
+    const previousElement = this.previousElementSibling;
+
+    if (e.key === "ArrowRight" && nextElement) {
+      this.setAttribute("tabindex", "-1");
+      nextElement.setAttribute("tabindex", "0");
+      nextElement.focus();
+    } else if (e.key === "ArrowLeft" && previousElement) {
+      previousElement.setAttribute("tabindex", "0");
+      previousElement.focus();
+    }
+  };
+  //adding the aria-select state for the selected tab
+  const _activeTab = function () {
+    _lastActiveTabBtn.setAttribute("aria-selected", "false");
+    _lastActiveTabPanel.setAttribute("hidden", "");
+    this.setAttribute("aria-selected", "true");
+
+    const currentTabPanel = document.querySelector(
+      `#${this.getAttribute("aria-controls")}`
+    );
+    currentTabPanel.removeAttribute("hidden");
+
+    _lastActiveTabBtn = this;
+    _lastActiveTabPanel = currentTabPanel;
+  };
+  //project initial execution
   const init = function () {
-    addEventOnElement(tabBtns, "click", function () {
-      lastActiveTabBtn.setAttribute("aria-selected", "false");
-      lastActiveTabPanel.setAttribute("hidden", "");
-      this.setAttribute("aria-selected", "true");
-
-      const currentTabPanel = document.querySelector(
-        `#${this.getAttribute("aria-controls")}`
-      );
-      currentTabPanel.removeAttribute("hidden");
-
-      lastActiveTabBtn = this;
-      lastActiveTabPanel = currentTabPanel;
-    });
-    addEventOnElement(tabBtns, "keydown", function (e) {
-      const nextElement = this.nextElementSibling;
-      const previousElement = this.previousElementSibling;
-
-      if (e.key === "ArrowRight" && nextElement) {
-        this.setAttribute("tabindex", "-1");
-        nextElement.setAttribute("tabindex", "0");
-        nextElement.focus();
-      } else if (e.key === "ArrowLeft" && previousElement) {
-        previousElement.setAttribute("tabindex", "0");
-        previousElement.focus();
-      }
-    });
-    _updateProfile(apiUrl);
+    addEventOnElement(_tabBtns, "click", _activeTab);
+    addEventOnElement(_tabBtns, "keydown", _tabControl);
+    _updateProfile(_apiUrl);
     getTheme();
-    followerTabBtn.addEventListener("click", _updateFollowerRepositories);
-    forkedTabBtn.addEventListener("click", _updateForkRepositories);
-    followingTabBtn.addEventListener("click", _updateFollowingRepositories);
-    searchBtn.addEventListener("click", _searchUser);
+    _followerTabBtn.addEventListener("click", _updateFollowerRepositories);
+    _forkedTabBtn.addEventListener("click", _updateForkRepositories);
+    _followingTabBtn.addEventListener("click", _updateFollowingRepositories);
+    _searchBtn.addEventListener("click", _searchUser);
     window.addEventListener("scroll", () => {
-      header.classList.toggle("active", scrollY > 60);
+      _header.classList.toggle("active", scrollY > 60);
     });
-    searchToggler.addEventListener("click", function () {
-      header.classList.toggle("search-active");
-      isExpanded = isExpanded ? false : true;
-      this.setAttribute("aria-expanded", isExpanded);
-
-      searchField.focus();
+    _searchToggler.addEventListener("click", function () {
+      _header.classList.toggle("search-active");
+      _searchField.focus();
     });
-    searchField.addEventListener("keydown", (e) => {
+    _searchField.addEventListener("keydown", (e) => {
       if (e.key === "Enter") _searchUser();
     });
     window.addEventListener("load", () => {
-      themeBtn.addEventListener("click", _changeTheme);
+      _themeBtn.addEventListener("click", _changeTheme);
     });
   };
 
