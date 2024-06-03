@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="GitHub Clone" />
     <!--- Favicon-->
-    <link rel="shortcut icon" href="./assets/Images/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="shortcut icon"
+      href="./src/Images/favicon.svg"
+      type="image/svg+xml"
+    />
 
     <!---- Google font link---->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,18 +24,20 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
     />
     <!---- Custom css link---->
-    <link rel="stylesheet" href="./assets/StyleSheet/main.css" />
+    <link rel="stylesheet" href="./src/StyleSheet/main.css" />
+    <!---- App js --->
+    <script src="./src/JavaScript/app.js" type="module"></script>
 
     <title>GitFinder // Find a GitHub profile in seconds</title>
   </head>
   <body>
-    <!-- Skip To Content -->
-    <a href="#main" class="skip-to-content">Skip to Content</a>
 
     <!-- Header -->
     <header class="header" data-header>
       <div class="container">
-        <a href="/" class="logo"> <span class="text-primary">Git</span>Finder </a>
+        <a href="/" class="logo">
+          <span class="text-primary">Git</span>Finder
+        </a>
         <div class="header-search">
           <button
             class="icon-btn search-toggler"
@@ -40,7 +46,9 @@
             aria-label="Toggle search"
             data-search-toggler
           >
-            <span class="material-symbols-rounded search-icon" aria-hidden="true"
+            <span
+              class="material-symbols-rounded search-icon"
+              aria-hidden="true"
               >search</span
             >
 
@@ -185,7 +193,5 @@
     <footer class="footer container">
       <p class="copyright">&copy; 2024 Created by ElvinWeb</p>
     </footer>
-    <!---- App js --->
-    <script src="./assets/JavaScript/app.js" type="module"></script>
   </body>
 </html>

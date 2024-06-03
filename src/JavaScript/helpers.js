@@ -1,11 +1,9 @@
 import { IS_DARK } from "./config.js";
+export { fetchData, addEventOnElement, numberToKilo, getTheme };
 
-export async function fetchData(url, successCallback, errorCallBack) {
+async function fetchData(url, successCallback, errorCallBack) {
   try {
     const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Failed to fetch");
-    }
 
     const data = await response.json();
     successCallback(data);
@@ -13,12 +11,12 @@ export async function fetchData(url, successCallback, errorCallBack) {
     errorCallBack(error);
   }
 }
-export const addEventOnElement = function ($elements, eventType, callback) {
+const addEventOnElement = function ($elements, eventType, callback) {
   for (const $item of $elements) {
     $item.addEventListener(eventType, callback);
   }
 };
-export const numberToKilo = function (number) {
+const numberToKilo = function (number) {
   let numStr = number.toString();
 
   if (numStr.length <= 3) {
@@ -31,7 +29,7 @@ export const numberToKilo = function (number) {
     return `${numStr.slice(0, -6)}M`;
   }
 };
-export const getTheme = function () {
+const getTheme = function () {
   if (sessionStorage.getItem("theme")) {
     document.documentElement.dataset.theme = sessionStorage.getItem("theme");
   } else {

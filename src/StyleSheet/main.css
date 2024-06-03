@@ -788,11 +788,50 @@ body {
   gap: 8px;
   z-index: 2;
 }
-.error .title-1 {
-  color: var(--alpha-50);
+.notfound {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  line-height: 1.4;
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
 }
-.error .text {
-  color: var(--alpha-80);
+.notfound-404 {
+  height: 230px;
+}
+.notfound .notfound-title {
+  font-size: 220px;
+  font-weight: 900;
+  color: var(--alpha-50);
+  text-transform: uppercase;
+  letter-spacing: 10px;
+}
+.notfound .notfound-subtitle {
+  font-size: 22px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--alpha-50);
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+.notfound .home-btn {
+  display: inline-block;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 13px 25px;
+  font-size: 18px;
+  background-color: var(--primary-light);
+  color: #fff;
+  border-radius: 40px;
+  margin: 7px;
+  transition: 0.2s all;
+}
+.notfound .home-btn:hover {
+  background-color: var(--primary-hover-light);
 }
 /* -----------------Footer--------------- */
 .footer {
@@ -908,5 +947,26 @@ body {
 @media only screen and (min-width: 1080px) {
   .tab-panel .card {
     max-width: calc(50% - 8px);
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .notfound .notfound-title {
+    font-size: 182px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .notfound .notfound-404 {
+    height: 146px;
+  }
+  .notfound .notfound-title {
+    font-size: 146px;
+  }
+  .notfound .notfound-subtitle {
+    font-size: 16px;
+  }
+  .notfound .home-btn {
+    font-size: 14px;
   }
 }

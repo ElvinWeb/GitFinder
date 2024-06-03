@@ -29,7 +29,7 @@ const GitHubApp = (function () {
   const _themeBtn = document.querySelector(".theme-btn");
   const _html = document.documentElement;
   let _forkedRepos = [];
-  let _apiUrl = `${BASE_API_URL}ElvinWeb`;
+  let _apiUrl = `${BASE_API_URL}Google`;
   let _repoUrl,
     _followerUrl,
     _followingUrl = "";
@@ -92,6 +92,7 @@ const GitHubApp = (function () {
     _repoUrl = repos_url;
     _followerUrl = followers_url;
     _followingUrl = following_url.replace("{/other_user}", "");
+    document.title = `GitFinder // ${username}`;
     _profileCard.innerHTML = `
   <figure
   class="${type == "User" ? "avatar-circle" : "avatar-rounded"} img-holder"
@@ -407,11 +408,17 @@ ${
   const _notFound = function () {
     _error.style.display = "grid";
     document.body.style.overflowY = "hidden";
+    document.title = "GitFinder // Not Found";
     _error.innerHTML = `
-        <p class="title-1">Oops! :(</p>
-        <p class="text">
-          There is no account with this username yet.
-        </p>
+        <div class="error-container">
+            <div class="notfound">
+              <div class="notfound-404">
+                <h1 class="notfound-title">404</h1>
+              </div>
+                <h2 class="notfound-subtitle">we are sorry, but there is no account with this username yet!</h2>
+                <a href="/index.html" class="home-btn">Go Home</a>
+            </div> 
+          </div>
       `;
   };
   //generic error message renderer
