@@ -27,6 +27,8 @@ const GitHubApp = (function () {
   const _followingRepoPanel = document.getElementById("panel-4");
   const _followingTabBtn = document.getElementById("tab-4");
   const _themeBtn = document.querySelector(".theme-btn");
+  const _intro = document.getElementById("intro");
+  const _logoSpan = document.querySelectorAll(".logo-span");
   const _html = document.documentElement;
   let _forkedRepos = [];
   let _apiUrl = `${BASE_API_URL}Google`;
@@ -470,7 +472,7 @@ ${
     window.addEventListener("scroll", () => {
       _header.classList.toggle("active", scrollY > 60);
     });
-    _searchToggler.addEventListener("click", function () {
+    _searchToggler.addEventListener("click", () => {
       _header.classList.toggle("search-active");
       _searchField.focus();
     });
@@ -479,6 +481,28 @@ ${
     });
     window.addEventListener("load", () => {
       _themeBtn.addEventListener("click", _changeTheme);
+    });
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        _logoSpan.forEach((span, i) => {
+          setTimeout(() => {
+            span.classList.add("active");
+          }, (i + 1) * 500);
+        });
+
+        setTimeout(() => {
+          _logoSpan.forEach((span, i) => {
+            setTimeout(() => {
+              span.classList.remove("active");
+              span.classList.add("fade");
+            }, (i + 1) * 100);
+          });
+        }, 2000);
+
+        setTimeout(() => {
+          _intro.style.top = "-100vh";
+        }, 2300);
+      });
     });
   };
 

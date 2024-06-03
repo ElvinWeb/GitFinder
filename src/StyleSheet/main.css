@@ -798,7 +798,6 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
 }
 .notfound-404 {
   height: 230px;
@@ -841,6 +840,45 @@ body {
 }
 .footer .copyright {
   color: var(--on-surface-2);
+}
+/* -----------------Intro--------------- */
+#intro {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--surface);
+  transition: all 1s;
+}
+#intro .intro-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--title-1);
+}
+#intro .logo--pos {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.logo-span {
+  position: relative;
+  display: inline-block;
+  bottom: -20px;
+  opacity: 0;
+}
+.logo-span.active {
+  bottom: 0;
+  opacity: 1;
+  transition: ease-in-out 0.5s;
+}
+.logo-span.fade {
+  bottom: 150px;
+  opacity: 0;
+  transition: ease-in-out 0.4s;
 }
 /* ---------------Media Queries------------- */
 @media only screen and (min-width: 768px) {
