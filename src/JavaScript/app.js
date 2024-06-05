@@ -3,6 +3,9 @@ import {
   addEventOnElement,
   numberToKilo,
   getTheme,
+  animateSpans,
+  removeAndAddClass,
+  hideElement,
 } from "./helpers.js";
 import {
   BASE_API_URL,
@@ -465,7 +468,7 @@ ${
     _lastActiveTabBtn = this;
     _lastActiveTabPanel = currentTabPanel;
   };
-  //adding the splash screen intro animation 
+  //adding the splash screen intro animation
   const _setIntroAnimation = function () {
     setTimeout(() => {
       animateSpans(_logoSpan, INITIAL_ANIMATION_STEP);
