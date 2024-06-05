@@ -1,5 +1,13 @@
 import { IS_DARK } from "./config.js";
-export { fetchData, addEventOnElement, numberToKilo, getTheme };
+export {
+  fetchData,
+  addEventOnElement,
+  numberToKilo,
+  getTheme,
+  animateSpans,
+  removeAndAddClass,
+  hideElement,
+};
 
 async function fetchData(url, successCallback, errorCallBack) {
   try {
@@ -11,9 +19,9 @@ async function fetchData(url, successCallback, errorCallBack) {
     errorCallBack(error);
   }
 }
-const addEventOnElement = function ($elements, eventType, callback) {
-  for (const $item of $elements) {
-    $item.addEventListener(eventType, callback);
+const addEventOnElement = function (elements, eventType, callback) {
+  for (const item of elements) {
+    item.addEventListener(eventType, callback);
   }
 };
 const numberToKilo = function (number) {
@@ -35,4 +43,26 @@ const getTheme = function () {
   } else {
     document.documentElement.dataset.theme = IS_DARK ? "dark" : "light";
   }
+};
+const animateSpans = function (spans, step) {
+  spans.forEach((span, i) => {
+    setTimeout(() => {
+      span.classList.add("active");
+    }, (i + 1) * step);
+  });
+};
+const removeAndAddClass = function (spans, delay, step) {
+  setTimeout(() => {
+    spans.forEach((span, i) => {
+      setTimeout(() => {
+        span.classList.remove("active");
+        span.classList.add("fade");
+      }, (i + 1) * step);
+    });
+  }, delay);
+};
+const hideElement = function (element, delay) {
+  setTimeout(() => {
+    element.style.top = "-100vh";
+  }, delay);
 };

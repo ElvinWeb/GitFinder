@@ -4,7 +4,13 @@ import {
   numberToKilo,
   getTheme,
 } from "./helpers.js";
-import { BASE_API_URL } from "./config.js";
+import {
+  BASE_API_URL,
+  INITIAL_ANIMATION_STEP,
+  REMOVE_ADDANIMATION_DELAY,
+  REMOVE_ADDANIMATION_STEP,
+  HIDE_INTRO_DELAY,
+} from "./config.js";
 
 import "core-js/actual";
 import "regenerator-runtime/runtime";
@@ -31,7 +37,7 @@ const GitHubApp = (function () {
   const _logoSpan = document.querySelectorAll(".logo-span");
   const _html = document.documentElement;
   let _forkedRepos = [];
-  let _apiUrl = `${BASE_API_URL}Google`;
+  let _apiUrl = `${BASE_API_URL}ElvinWeb`;
   let _repoUrl,
     _followerUrl,
     _followingUrl = "";
@@ -459,6 +465,18 @@ ${
     _lastActiveTabBtn = this;
     _lastActiveTabPanel = currentTabPanel;
   };
+  //adding the splash screen intro animation 
+  const _setIntroAnimation = function () {
+    setTimeout(() => {
+      animateSpans(_logoSpan, INITIAL_ANIMATION_STEP);
+      removeAndAddClass(
+        _logoSpan,
+        REMOVE_ADDANIMATION_DELAY,
+        REMOVE_ADDANIMATION_STEP
+      );
+      hideElement(_intro, HIDE_INTRO_DELAY);
+    });
+  };
   //project initial execution
   const init = function () {
     addEventOnElement(_tabBtns, "click", _activeTab);
@@ -482,28 +500,7 @@ ${
     window.addEventListener("load", () => {
       _themeBtn.addEventListener("click", _changeTheme);
     });
-    window.addEventListener("DOMContentLoaded", () => {
-      setTimeout(() => {
-        _logoSpan.forEach((span, i) => {
-          setTimeout(() => {
-            span.classList.add("active");
-          }, (i + 1) * 500);
-        });
-
-        setTimeout(() => {
-          _logoSpan.forEach((span, i) => {
-            setTimeout(() => {
-              span.classList.remove("active");
-              span.classList.add("fade");
-            }, (i + 1) * 100);
-          });
-        }, 2000);
-
-        setTimeout(() => {
-          _intro.style.top = "-100vh";
-        }, 2300);
-      });
-    });
+    window.addEventListener("DOMContentLoaded", _setIntroAnimation);
   };
 
   // Public methods and properties
