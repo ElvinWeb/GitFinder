@@ -1,3 +1,4 @@
+/*--------------- Variables ----------------*/
 :root {
   /* --------------Colors------------- */
   --white: hsl(0, 0%, 100%);
@@ -986,13 +987,11 @@ body {
     max-width: calc(50% - 8px);
   }
 }
-
 @media only screen and (max-width: 768px) {
   .notfound .notfound-title {
     font-size: 182px;
   }
 }
-
 @media only screen and (max-width: 480px) {
   .notfound .notfound-404 {
     height: 146px;

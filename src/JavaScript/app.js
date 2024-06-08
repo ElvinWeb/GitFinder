@@ -48,7 +48,7 @@ const GitHubApp = (function () {
   let _lastActiveTabPanel = _tabPanels[0];
 
   //fetched data from api url sended to _profile method
-  const _updateProfile = function (profileUrl) {
+  window._updateProfile = function (profileUrl) {
     _error.style.display = "none";
     document.body.style.overflow = "visible";
 
@@ -343,6 +343,7 @@ ${
     if (data.length && data.length > 0) {
       for (const item of data) {
         const { login: username, avatar_url, url } = item;
+        console.log(url);
 
         const followerRepoCard = document.createElement("article");
         followerRepoCard.classList.add("card", "follower-card");
@@ -356,7 +357,7 @@ ${
               />
             </figure>
             <h3 class="card-title">${username}</h3>
-            <button class="icon-btn" onclick="updateProfile(\'${url}\')" aria-label="Go to ${username} profile">
+            <button class="icon-btn" onclick="_updateProfile(\'${url}\')" aria-label="Go to ${username} profile">
               <span class="material-symbols-rounded" aria-hidden="true">link</span>
             </button>
             `;
