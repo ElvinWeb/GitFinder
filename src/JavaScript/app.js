@@ -103,7 +103,6 @@ const GitHubApp = (function () {
     _repoUrl = repos_url;
     _followerUrl = followers_url;
     _followingUrl = following_url.replace("{/other_user}", "");
-    document.title = `GitFinder // ${username}`;
     _profileCard.innerHTML = `
   <figure
   class="${type == "User" ? "avatar-circle" : "avatar-rounded"} img-holder"
@@ -214,7 +213,7 @@ ${
   const _updateRepositories = function () {
     fetchData(`${_repoUrl}?sort=created&per_page=12`, _repositories);
   };
-  //profile repositories created dynamically with fetched data
+  //to process and display profile repositories
   const _repositories = function (data) {
     _repoPanel.innerHTML = `<h2 class="sr-only">Repositories</h2>`;
     _forkedRepos = data.filter((item) => item.fork);
@@ -222,108 +221,114 @@ ${
 
     if (repositories.length && repositories.length > 0) {
       for (const repo of repositories) {
-        const {
-          name,
-          html_url,
-          description,
-          private: isPrivate,
-          language,
-          stargazers_count: stars_count,
-          forks_count,
-        } = repo;
-
-        const repoCard = document.createElement("article");
-        repoCard.classList.add("card", "repo-card");
-
-        repoCard.innerHTML = `
-          <div class="card-body">
-            <a href="${html_url}" class="card-title" target="_blank">
-              <h3 class="title-3">${name}</h3>
-            </a>
-            ${description ? `<p class="card-text">${description}</p>` : ""}
-            <span class="badge">${isPrivate ? "Private" : "Public"}</span>
-          </div>
-          <div class="card-footer">
-          ${
-            language
-              ? ` <div class="meta-item">
-              <span class="material-symbols-rounded" aria-hidden="true">code_blocks</span>
-              <span class="span">${language}</span>
-            </div>`
-              : ""
-          }
-            <div class="meta-item">
-              <span class="material-symbols-rounded" aria-hidden="true">star_rate</span>
-              <span class="span">${numberToKilo(stars_count)}</span>
-            </div>
-            <div class="meta-item">
-              <span class="material-symbols-rounded" aria-hidden="true">family_history</span>
-              <span class="span">${numberToKilo(forks_count)}</span>
-            </div>
-          </div>
-          `;
-
-        _repoPanel.appendChild(repoCard);
+        _repositoryCard(repo, _repoPanel);
       }
     } else {
       _errorMessage(_repoPanel, "Doesn't have the any public repositories yet");
     }
   };
-  //profile fork repositories created dynamically with fetched data
+  //to create and generate a repository card markup
+  const _repositoryCard = function (repo, _repoPanel) {
+    const {
+      name,
+      html_url,
+      description,
+      private: isPrivate,
+      language,
+      stargazers_count: stars_count,
+      forks_count,
+    } = repo;
+
+    const repoCard = document.createElement("article");
+    repoCard.classList.add("card", "repo-card");
+    repoCard.innerHTML = `
+      <div class="card-body">
+        <a href="${html_url}" class="card-title" target="_blank">
+          <h3 class="title-3">${name}</h3>
+        </a>
+        ${description ? `<p class="card-text">${description}</p>` : ""}
+        <span class="badge">${isPrivate ? "Private" : "Public"}</span>
+      </div>
+      <div class="card-footer">
+      ${
+        language
+          ? ` <div class="meta-item">
+          <span class="material-symbols-rounded" aria-hidden="true">code_blocks</span>
+          <span class="span">${language}</span>
+        </div>`
+          : ""
+      }
+        <div class="meta-item">
+          <span class="material-symbols-rounded" aria-hidden="true">star_rate</span>
+          <span class="span">${numberToKilo(stars_count)}</span>
+        </div>
+        <div class="meta-item">
+          <span class="material-symbols-rounded" aria-hidden="true">family_history</span>
+          <span class="span">${numberToKilo(forks_count)}</span>
+        </div>
+      </div>
+    `;
+
+    _repoPanel.appendChild(repoCard);
+  };
+  //to process and display profile forked repositories
   const _updateForkRepositories = function () {
     _forkedRepoPanel.innerHTML = `<h2 class="sr-only">Forked Repositories</h2>`;
 
     if (_forkedRepos.length && _forkedRepos.length > 0) {
       for (const repo of _forkedRepos) {
-        const {
-          name,
-          html_url,
-          description,
-          private: isPrivate,
-          language,
-          stargazers_count: stars_count,
-          forks_count,
-        } = repo;
-
-        const forkedRepoCard = document.createElement("article");
-        forkedRepoCard.classList.add("card", "repo-card");
-
-        forkedRepoCard.innerHTML = `
-        <div class="card-body">
-          <a href="${html_url}" class="card-title" target="_blank">
-            <h3 class="title-3">${name}</h3>
-          </a>
-          ${description ? `<p class="card-text">${description}</p>` : ""}
-          <span class="badge">${isPrivate ? "Private" : "Public"}</span>
-        </div>
-        <div class="card-footer">
-        ${
-          language
-            ? ` <div class="meta-item">
-            <span class="material-symbols-rounded" aria-hidden="true">code_blocks</span>
-            <span class="span">${language}</span>
-          </div>`
-            : ""
-        }
-          <div class="meta-item">
-            <span class="material-symbols-rounded" aria-hidden="true">star_rate</span>
-            <span class="span">${numberToKilo(stars_count)}</span>
-          </div>
-          <div class="meta-item">
-            <span class="material-symbols-rounded" aria-hidden="true">family_history</span>
-            <span class="span">${numberToKilo(forks_count)}</span>
-          </div>
-        </div>
-        `;
-
-        _forkedRepoPanel.appendChild(forkedRepoCard);
+        _forkRepositoryCard(repo, _forkedRepoPanel);
       }
     } else {
       _errorMessage(
         _forkedRepoPanel,
-        "Doesn't have the any Forked repositories yet"
+        "Doesn't have the any forked repositories yet"
       );
     }
+  };
+  //to create and generate a forked repository card markup
+  const _forkRepositoryCard = function (repo, _forkedRepoPanel) {
+    const {
+      name,
+      html_url,
+      description,
+      private: isPrivate,
+      language,
+      stargazers_count: stars_count,
+      forks_count,
+    } = repo;
+
+    const forkedRepoCard = document.createElement("article");
+    forkedRepoCard.classList.add("card", "repo-card");
+    forkedRepoCard.innerHTML = `
+    <div class="card-body">
+      <a href="${html_url}" class="card-title" target="_blank">
+        <h3 class="title-3">${name}</h3>
+      </a>
+      ${description ? `<p class="card-text">${description}</p>` : ""}
+      <span class="badge">${isPrivate ? "Private" : "Public"}</span>
+    </div>
+    <div class="card-footer">
+    ${
+      language
+        ? ` <div class="meta-item">
+        <span class="material-symbols-rounded" aria-hidden="true">code_blocks</span>
+        <span class="span">${language}</span>
+      </div>`
+        : ""
+    }
+      <div class="meta-item">
+        <span class="material-symbols-rounded" aria-hidden="true">star_rate</span>
+        <span class="span">${numberToKilo(stars_count)}</span>
+      </div>
+      <div class="meta-item">
+        <span class="material-symbols-rounded" aria-hidden="true">family_history</span>
+        <span class="span">${numberToKilo(forks_count)}</span>
+      </div>
+    </div>
+    `;
+
+    _forkedRepoPanel.appendChild(forkedRepoCard);
   };
   //fetched data from api url sended to _followerRepositories method
   const _updateFollowerRepositories = function () {
@@ -336,37 +341,40 @@ ${
 
     fetchData(_followerUrl, _followerRepositories);
   };
-  //profile follower repositories created dynamically with fetched data
+  //to process and display profile follower repositories
   const _followerRepositories = function (data) {
     _followerRepoPanel.innerHTML = `<h2 class="sr-only">Followers</h2>`;
 
     if (data.length && data.length > 0) {
       for (const item of data) {
-        const { login: username, avatar_url, url } = item;
-        console.log(url);
-
-        const followerRepoCard = document.createElement("article");
-        followerRepoCard.classList.add("card", "follower-card");
-
-        followerRepoCard.innerHTML = ` 
-            <figure class="avatar-circle img-holder">
-              <img
-                src="${avatar_url}"
-                alt=""
-                class="img-cover"
-              />
-            </figure>
-            <h3 class="card-title">${username}</h3>
-            <button class="icon-btn" onclick="_updateProfile(\'${url}\')" aria-label="Go to ${username} profile">
-              <span class="material-symbols-rounded" aria-hidden="true">link</span>
-            </button>
-            `;
-
-        _followerRepoPanel.appendChild(followerRepoCard);
+        _followerRepositoryCard(item, _followerRepoPanel);
       }
     } else {
       _errorMessage(_followerRepoPanel, "Doesn't have the any follower yet");
     }
+  };
+  //to create and generate a follower repository card markup
+  const _followerRepositoryCard = function (item, _followerRepoPanel) {
+    const { login: username, avatar_url, url } = item;
+
+    const followerRepoCard = document.createElement("article");
+    followerRepoCard.classList.add("card", "follower-card");
+
+    followerRepoCard.innerHTML = ` 
+        <figure class="avatar-circle img-holder">
+          <img
+            src="${avatar_url}"
+            alt=""
+            class="img-cover"
+          />
+        </figure>
+        <h3 class="card-title">${username}</h3>
+        <button class="icon-btn" onclick="_updateProfile(\'${url}\')" aria-label="Go to ${username} profile">
+          <span class="material-symbols-rounded" aria-hidden="true">link</span>
+        </button>
+    `;
+
+    _followerRepoPanel.appendChild(followerRepoCard);
   };
   //fetched data from api url sended to _followingRepositories method
   const _updateFollowingRepositories = function () {
@@ -380,33 +388,36 @@ ${
 
     fetchData(_followingUrl, _followingRepositories);
   };
-  //profile following repositories created dynamically with fetched data
+  //to process and display profile following repositories
   const _followingRepositories = function (data) {
     _followingRepoPanel.innerHTML = `<h2 class="sr-only">Following</h2>`;
     if (data.length && data.length > 0) {
       for (const item of data) {
-        const { login: username, avatar_url, url } = item;
-
-        const followingRepoCard = document.createElement("article");
-        followingRepoCard.classList.add("card", "follower-card");
-
-        followingRepoCard.innerHTML = `
-          <figure class="avatar-circle img-holder">
-            <img src="${avatar_url}&s=64" width="56" height="56" loading="lazy" alt="${username}"
-              class="img-cover">
-          </figure>
-  
-          <h3 class="card-title">${username}</h3>
-  
-          <button class="icon-btn" onclick="updateProfile(\'${url}\')" aria-label="Go to ${username} profile">
-            <span class="material-symbols-rounded" aria-hidden="true">link</span>
-          </button>`;
-
-        _followingRepoPanel.appendChild(followingRepoCard);
+        _followingRepositoryCard(item, _followerRepoPanel);
       }
     } else {
       _errorMessage(_followerRepoPanel, "Doesn't have any following yet.");
     }
+  };
+  //to create and generate a following repository card markup
+  const _followingRepositoryCard = function (item, _followerRepoPanel) {
+    const { login: username, avatar_url, url } = item;
+
+    const followingRepoCard = document.createElement("article");
+    followingRepoCard.classList.add("card", "follower-card");
+    followingRepoCard.innerHTML = `
+      <figure class="avatar-circle img-holder">
+        <img src="${avatar_url}&s=64" width="56" height="56" loading="lazy" alt="${username}"
+          class="img-cover">
+      </figure>
+
+      <h3 class="card-title">${username}</h3>
+
+      <button class="icon-btn" onclick="_updateProfile(\'${url}\')" aria-label="Go to ${username} profile">
+        <span class="material-symbols-rounded" aria-hidden="true">link</span>
+      </button>`;
+
+    _followingRepoPanel.appendChild(followingRepoCard);
   };
   //light and dark mode state changer
   const _changeTheme = function () {
@@ -431,7 +442,7 @@ ${
                 <a href="/index.html" class="home-btn">Go Home</a>
             </div> 
           </div>
-      `;
+    `;
   };
   //generic error message renderer
   const _errorMessage = function (repoElement, message) {

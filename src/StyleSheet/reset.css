@@ -1,0 +1,62 @@
+/* ------------------Reset Css-------------- */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+a,
+img,
+svg,
+span,
+input,
+button {
+  display: block;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+img {
+  height: auto;
+}
+input,
+button {
+  background: none;
+  border: none;
+  font: inherit;
+}
+input {
+  width: 100%;
+}
+button {
+  cursor: pointer;
+}
+html {
+  font-size: var(--base-font-size);
+}
+body {
+  background: var(--background);
+  color: var(--on-background);
+  font-family: var(--font-primary);
+  font-weight: var(--weight-regular);
+  font-size: var(--label-1);
+  line-height: 20px;
+  letter-spacing: 0.2px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--header-height) 16px;
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--surface-variant);
+  border-radius: var(--radius-pill);
+}
