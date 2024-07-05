@@ -3,17 +3,8 @@ import {
   addEventOnElement,
   numberToKilo,
   getTheme,
-  animateSpans,
-  removeAndAddClass,
-  hideElement,
 } from "./helpers.js";
-import {
-  BASE_API_URL,
-  INITIAL_ANIMATION_STEP,
-  REMOVE_ADDANIMATION_DELAY,
-  REMOVE_ADDANIMATION_STEP,
-  HIDE_INTRO_DELAY,
-} from "./config.js";
+import { BASE_API_URL, ZOOM_ANIMATION_DELAY } from "./config.js";
 
 import "core-js/actual";
 import "regenerator-runtime/runtime";
@@ -37,7 +28,6 @@ const GitHubApp = (function () {
   const _followingTabBtn = document.getElementById("tab-4");
   const _themeBtn = document.querySelector(".theme-btn");
   const _intro = document.getElementById("intro");
-  const _logoSpan = document.querySelectorAll(".logo-span");
   const _html = document.documentElement;
   let _forkedRepos = [];
   let _apiUrl = `${BASE_API_URL}ElvinWeb`;
@@ -480,17 +470,11 @@ ${
     _lastActiveTabBtn = this;
     _lastActiveTabPanel = currentTabPanel;
   };
-  //adding the splash screen intro animation
+  //adding the zoom screen intro animation
   const _setIntroAnimation = function () {
     setTimeout(() => {
-      animateSpans(_logoSpan, INITIAL_ANIMATION_STEP);
-      removeAndAddClass(
-        _logoSpan,
-        REMOVE_ADDANIMATION_DELAY,
-        REMOVE_ADDANIMATION_STEP
-      );
-      hideElement(_intro, HIDE_INTRO_DELAY);
-    });
+      _intro.style.visibility = "hidden";
+    }, ZOOM_ANIMATION_DELAY);
   };
   //project initial execution
   const init = function () {
