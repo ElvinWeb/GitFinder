@@ -55,7 +55,7 @@
   .main .container {
     display: grid;
     grid-template-columns: 240px 1fr;
-    gap: 36px;
+    gap: 60px;
     align-items: flex-start;
   }
 
